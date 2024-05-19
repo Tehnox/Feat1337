@@ -26,6 +26,7 @@ def _print_log(log: dict):
         logging.info(
             f'Information for items with label {key}: count = {count}, mean = {mean}, standard deviation = {sd}')
 
+
 def run():
     registered_loaders = get_names()
     for name in registered_loaders:
@@ -47,4 +48,11 @@ def run():
             except Exception as e:
                 exception_args = ', '.join(e.args)
                 logging.error(f'Loader {name} failed. Reason: error in dataset | {exception_args} - {type(e)}')
+                logging.warning('Skipping info checks.')
                 continue
+
+            try:
+                _print_log(log)
+            except Exception as e:
+                exception_args = ', '.join(e.args)
+                logging.error(f'Loader {name} failed. Reason: error in info | {exception_args} - {type(e)}')
